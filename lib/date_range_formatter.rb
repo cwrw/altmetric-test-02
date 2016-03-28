@@ -13,61 +13,34 @@ class DateRangeFormatter
 
   def to_s
     if start_date == end_date
-      same_date
+      time_comparison(
+        same_time: "#{full_start_date} at #{start_time} to #{end_time}",
+        start_time: "#{full_start_date} at #{start_time}",
+        end_time: "#{full_start_date} until #{end_time}",
+        other: full_start_date
+      )
     elsif start_date.month == end_date.month && start_date.year == end_date.year
-      same_month
+      time_comparison(
+        other: start_date.strftime("#{start_date.day.ordinalize} - #{end_date.day.ordinalize} %B %Y")
+      )
     elsif start_date.year == end_date.year
-      same_year
+      time_comparison(
+        other: start_date.strftime("#{start_date.day.ordinalize} %B - ") + full_end_date
+      )
     else
-      other_date
+      time_comparison
     end
   end
 
-  def same_date
+  def time_comparison(options = {})
     if start_time && end_time
-      "#{full_start_date} at #{start_time} to #{end_time}"
+      options.fetch(:same_time, "#{full_start_date} at #{start_time} - #{full_end_date} at #{end_time}")
     elsif start_time
-      "#{full_start_date} at #{start_time}"
+      options.fetch(:start_time, "#{full_start_date} at #{start_time} - #{full_end_date}")
     elsif end_time
-      "#{full_start_date} until #{end_time}"
+      options.fetch(:end_time, "#{full_start_date} - #{full_end_date} at #{end_time}")
     else
-      full_start_date
-    end
-  end
-
-  def same_month
-    if start_time && end_time
-      "#{full_start_date} at #{start_time} - #{full_end_date} at #{end_time}"
-    elsif start_time
-      "#{full_start_date} at #{start_time} - #{full_end_date}"
-    elsif end_time
-      "#{full_start_date} - #{full_end_date} at #{end_time}"
-    else
-      start_date.strftime("#{start_date.day.ordinalize} - #{end_date.day.ordinalize} %B %Y")
-    end
-  end
-
-  def same_year
-    if start_time && end_time
-      "#{full_start_date} at #{start_time} - #{full_end_date} at #{end_time}"
-    elsif start_time
-      "#{full_start_date} at #{start_time} - #{full_end_date}"
-    elsif end_time
-      "#{full_start_date} - #{full_end_date} at #{end_time}"
-    else
-      start_date.strftime("#{start_date.day.ordinalize} %B - ") + full_end_date
-    end
-  end
-
-  def other_date
-    if start_time && end_time
-      "#{full_start_date} at #{start_time} - #{full_end_date} at #{end_time}"
-    elsif start_time
-      "#{full_start_date} at #{start_time} - #{full_end_date}"
-    elsif end_time
-      "#{full_start_date} - #{full_end_date} at #{end_time}"
-    else
-      "#{full_start_date} - #{full_end_date}"
+      options.fetch(:other, "#{full_start_date} - #{full_end_date}")
     end
   end
 
