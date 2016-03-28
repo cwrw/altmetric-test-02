@@ -19,14 +19,16 @@ class DateRangeFormatter
         end_time: "#{full_start_date} until #{end_time}",
         other: full_start_date
       )
-    elsif start_date.month == end_date.month && start_date.year == end_date.year
-      time_comparison(
-        other: start_date.strftime("#{start_date.day.ordinalize} - #{end_date.day.ordinalize} %B %Y")
-      )
     elsif start_date.year == end_date.year
-      time_comparison(
-        other: start_date.strftime("#{start_date.day.ordinalize} %B - ") + full_end_date
-      )
+      if start_date.month == end_date.month
+        time_comparison(
+          other: start_date.strftime("#{start_date.day.ordinalize} - #{end_date.day.ordinalize} %B %Y")
+        )
+      else
+        time_comparison(
+          other: start_date.strftime("#{start_date.day.ordinalize} %B - ") + full_end_date
+        )
+      end
     else
       time_comparison
     end
