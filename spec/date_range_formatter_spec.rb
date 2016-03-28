@@ -1,5 +1,3 @@
-require "date_range_formatter"
-
 RSpec.describe(DateRangeFormatter) do
   context "same day" do
     it "formats a date range for the same day" do
